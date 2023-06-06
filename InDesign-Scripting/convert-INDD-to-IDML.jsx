@@ -151,7 +151,7 @@ function exportPdfFile(doc) {
 function openLogFile(logFile) {
     try {
         logFile.encoding = "UTF-8";
-        logFile.open("w");
+        logFile.open("a");
     } catch (e) {
         alert(e);
         logFile.close();
