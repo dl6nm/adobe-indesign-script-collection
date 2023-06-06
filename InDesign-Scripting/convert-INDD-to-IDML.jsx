@@ -2,7 +2,8 @@
 
 // Set default parameters
 var showDocumentInWindow = true; // Set to true to open the InDesign file in a window.
-var logFile = new File(Folder.appData + "/indd-to-idml.log");
+// var logFile = new File(Folder.appData + "/indd-to-idml.log");
+var logFile = new File(File($.fileName).path + "/indd-to-idml.log");
 var updateLinks = true; // Set to true to update missing links.
 var exportPdf = true; // Set to true to export a PDF file.
 
