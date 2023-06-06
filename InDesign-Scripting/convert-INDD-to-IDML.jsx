@@ -74,19 +74,27 @@ function recursiveConvertInddToIdml(folder) {
      * Recursively scans a folder an its subfolders for InDesign files and converts them to IDML.
      * @param {Folder} folder - The folder to scan.
      */
-    // Convert InDesign files to IDML.
-    logInfo("Scan folder: " + folder.fsName);
-    var inddFiles = folder.getFiles("*.indd");
-    for (var i = 0; i < inddFiles.length; i++) {
-        convertInddToIdml(inddFiles[i]);
+    try {
+        // Convert InDesign files to IDML.
+        logInfo("Scan folder: " + folder.fsName);
+        var inddFiles = folder.getFiles("*.indd");
+        for (var i = 0; i < inddFiles.length; i++) {
+            convertInddToIdml(inddFiles[i]);
+        }
+    } catch (e) {
+        logError("recursiveConvertInddToIdml()::inddFiles:: " + e);
     }
 
-    // Scan subfolders.
-    var subFolders = folder.getFiles("*");
-    for (var i = 0; i < subFolders.length; i++) {
-        if (subFolders[i] instanceof Folder) {
-            recursiveConvertInddToIdml(subFolders[i]);
+    try {
+        // Scan subfolders.
+        var subFolders = folder.getFiles("*");
+        for (var i = 0; i < subFolders.length; i++) {
+            if (subFolders[i] instanceof Folder) {
+                recursiveConvertInddToIdml(subFolders[i]);
+            }
         }
+    } catch (e) {
+        logError("recursiveConvertInddToIdml()::subFolders:: " + e);
     }
 }
 
@@ -122,14 +130,18 @@ function convertInddToIdml(file) {
             exportPdfFile(file, doc);
         }
 
-        // Define the IDML file.
-        var idmlFile = new File(
-            file.path + "/" + doc.name.replace(/\.indd$/, ".idml")
-        );
+        try {
+            // Define the IDML file.
+            var idmlFile = new File(
+                file.path + "/" + doc.name.replace(/\.indd$/, ".idml")
+            );
 
-        // Save the IDML file.
-        doc.exportFile(ExportFormat.INDESIGN_MARKUP, idmlFile);
-        logInfo("IDML file saved: " + idmlFile.fsName);
+            // Save the IDML file.
+            doc.exportFile(ExportFormat.INDESIGN_MARKUP, idmlFile);
+            logInfo("IDML file saved: " + idmlFile.fsName);
+        } catch (e) {
+            logError("convertInddToIdml()::exportFile:: " + e);
+        }
     } catch (e) {
         logError("convertInddToIdml():: " + e);
     } finally {
@@ -186,9 +198,13 @@ function log(message, severity) {
     // logFile.writeln(message + " " + severity);
 
     // Log a message with timestamp and severity to the log file.
-    var timestamp = getISOTimestamp();
-    var severity = severity || "INFO";
-    logFile.writeln(timestamp + " " + severity + ": " + message);
+    try {
+        var timestamp = getISOTimestamp();
+        var severity = severity || "INFO";
+        logFile.writeln(timestamp + " " + severity + ": " + message);
+    } catch (e) {
+        alert("log():: " + e);
+    }
 }
 
 function logError(message) {
@@ -228,22 +244,26 @@ function getISOTimestamp() {
      * Returns an ISO 8601 timestamp.
      * @returns {string} - The ISO 8601 timestamp.
      */
-    var now = new Date();
-    // Create ISO 8601 timestamp
-    var timestamp =
-        now.getFullYear() +
-        "-" +
-        ("0" + (now.getMonth() + 1)).slice(-2) +
-        "-" +
-        ("0" + now.getDate()).slice(-2) +
-        "T" +
-        ("0" + now.getHours()).slice(-2) +
-        ":" +
-        ("0" + now.getMinutes()).slice(-2) +
-        ":" +
-        ("0" + now.getSeconds()).slice(-2) +
-        "." +
-        ("00" + now.getMilliseconds()).slice(-3) +
-        "Z";
-    return timestamp;
+    try {
+        var now = new Date();
+        // Create ISO 8601 timestamp
+        var timestamp =
+            now.getFullYear() +
+            "-" +
+            ("0" + (now.getMonth() + 1)).slice(-2) +
+            "-" +
+            ("0" + now.getDate()).slice(-2) +
+            "T" +
+            ("0" + now.getHours()).slice(-2) +
+            ":" +
+            ("0" + now.getMinutes()).slice(-2) +
+            ":" +
+            ("0" + now.getSeconds()).slice(-2) +
+            "." +
+            ("00" + now.getMilliseconds()).slice(-3) +
+            "Z";
+        return timestamp;
+    } catch (e) {
+        logError("getISOTimestamp():: " + e);
+    }
 }
