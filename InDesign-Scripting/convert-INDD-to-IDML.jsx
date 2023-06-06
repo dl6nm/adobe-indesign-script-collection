@@ -19,7 +19,8 @@ app.scriptPreferences.enableRedraw = true;
 try {
     // Init logger
     openLogFile(logFile);
-    log("Start script", "INFO");
+    logDebug("Run script with " + app.name + " " + app.version);
+    logDebug("Script file: " + File($.fileName).fsName);
 
     // Ask the user to confirm a recursive conversion of InDesign files to IDML, otherwise convert just a single file.
     var recursive = confirm(
@@ -27,7 +28,7 @@ try {
         false,
         "Convert InDesign files to IDML"
     );
-    log("Recursive: " + recursive, "INFO");
+    logInfo("Recursive: " + recursive);
 
     // Ask the user to confirm also the export of a PDF file.
     var exportPdf = confirm(
@@ -52,7 +53,7 @@ try {
     }
 } catch (e) {
     alert(e);
-    log(e, "ERROR");
+    logError(e, "ERROR");
 } finally {
     // Close the log file.
     closeLogFile(logFile);
@@ -102,11 +103,11 @@ function convertInddToIdml(file) {
                     if (link.status == LinkStatus.LINK_OUT_OF_DATE) {
                         link.update();
                     } else if (link.status == LinkStatus.LINK_MISSING) {
-                        log("Link missing: " + link.filePath);
-                    } 
+                        logWarning("Link missing: " + link.filePath);
+                    }
                 }
             } catch (e) {
-                log(e);
+                logError(e);
             }
         }
 
@@ -123,7 +124,7 @@ function convertInddToIdml(file) {
         // Save the IDML file.
         doc.exportFile(ExportFormat.INDESIGN_MARKUP, idmlFile);
     } catch (e) {
-        log(e);
+        logError(e);
     } finally {
         // Close the InDesign file
         doc.close(SaveOptions.NO);
@@ -144,7 +145,7 @@ function exportPdfFile(doc) {
         // Export the PDF file.
         doc.exportFile(ExportFormat.PDF_TYPE, pdfFile);
     } catch (e) {
-        log(e);
+        logError(e);
     }
 }
 
