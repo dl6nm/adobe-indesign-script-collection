@@ -27,13 +27,19 @@ try {
         "Convert InDesign files to IDML"
     );
 
+    // Ask the user to confirm also the export of a PDF file.
+    var exportPdf = confirm(
+        "Export also a PDF file?",
+        false,
+        "Export PDF file"
+    );
+
     if (!recursive) {
         // Convert a single file.
         // Open an InDesign file
         var file = File.openDialog("Select the InDesign file.", "*.indd");
         // Convert the InDesign file to IDML and optionally export a PDF file.
         if (file) {
-            alert("Converting " + file.name + " to IDML.");
             convertInddToIdml(file);
         }
     } else {
