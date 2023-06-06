@@ -28,7 +28,7 @@ try {
         false,
         "Convert InDesign files to IDML"
     );
-    logInfo("Recursive: " + recursive);
+    logInfo("Recursive scan and convert files from folders and subfolders: " + recursive);
 
     // Ask the user to confirm also the export of a PDF file.
     var exportPdf = confirm(
@@ -36,6 +36,7 @@ try {
         false,
         "Export PDF file"
     );
+    logInfo("Export all files also as PDF: " + exportPdf);
 
     if (!recursive) {
         // Convert a single file.
@@ -71,6 +72,7 @@ function recursiveConvertInddToIdml(folder) {
      * @param {Folder} folder - The folder to scan.
      */
     // Convert InDesign files to IDML.
+    logInfo("Scan folder: " + folder.fsName);
     var inddFiles = folder.getFiles("*.indd");
     for (var i = 0; i < inddFiles.length; i++) {
         convertInddToIdml(inddFiles[i]);
@@ -91,6 +93,7 @@ function convertInddToIdml(file) {
      * @param {File} file - The InDesign file to open.
      */
     try {
+        logInfo("Convert InDesign file to IDML: " + file.fsName);
         // Open file in InDesign
         var doc = app.open(file, showDocumentInWindow);
 
@@ -123,11 +126,13 @@ function convertInddToIdml(file) {
 
         // Save the IDML file.
         doc.exportFile(ExportFormat.INDESIGN_MARKUP, idmlFile);
+        logInfo("IDML file saved: " + idmlFile.fsName);
     } catch (e) {
         logError(e);
     } finally {
         // Close the InDesign file
         doc.close(SaveOptions.NO);
+        logDebug("InDesign file closed: " + file.fsName);
     }
 }
 
@@ -137,6 +142,7 @@ function exportPdfFile(doc) {
      * @param {Document} doc - The InDesign document to export.
      */
     try {
+        logInfo("Export PDF file: " + doc.name);
         // Define the PDF file.
         var pdfFile = new File(
             file.path + "/" + file.name.replace(/\.indd$/, "_preview.pdf")
@@ -144,6 +150,7 @@ function exportPdfFile(doc) {
 
         // Export the PDF file.
         doc.exportFile(ExportFormat.PDF_TYPE, pdfFile);
+        logInfo("PDF file exported: " + pdfFile.fsName);
     } catch (e) {
         logError(e);
     }
