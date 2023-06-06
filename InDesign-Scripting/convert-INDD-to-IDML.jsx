@@ -1,6 +1,6 @@
 // Open an InDesign (indd) file using JavaScript, ignore missing links, and save as IDML.
 
-// Set parameters
+// Set default parameters
 var showDocumentInWindow = true; // Set to true to open the InDesign file in a window.
 var logFile = new File(Folder.myDocuments + "/indd-to-idml.log");
 var updateLinks = true; // Set to true to update missing links.
@@ -20,11 +20,28 @@ try {
     // Init logger
     var logger = getLogger(logFile);
 
-    // Open an InDesign file
-    var file = File.openDialog("Select the InDesign file.", "*.indd");
+    // Ask the user to confirm a recursive conversion of InDesign files to IDML, otherwise convert just a single file.
+    var recursive = confirm(
+        "Convert all InDesign files from a folder and its subfolders to IDML? Otherwise, convert just a single file.",
+        false,
+        "Convert InDesign files to IDML"
+    );
 
-    // Convert the InDesign file to IDML and optionally export a PDF file.
-    convertInddToIdml(file);
+    if (!recursive) {
+        // Convert a single file.
+        // Open an InDesign file
+        var file = File.openDialog("Select the InDesign file.", "*.indd");
+        // Convert the InDesign file to IDML and optionally export a PDF file.
+        if (file) {
+            alert("Converting " + file.name + " to IDML.");
+            convertInddToIdml(file);
+        }
+    } else {
+        // Convert a folder and its subfolders.
+        // Scan a folder and its subfolders for InDesign files and convert them to IDML.
+        var folder = Folder.selectDialog("Select the folder to scan.");
+        recursiveConvertInddToIdml(folder);
+    }
 } catch (e) {
     log(e);
 } finally {
@@ -37,6 +54,27 @@ try {
     # Functions
     #########################################
 */
+
+function recursiveConvertInddToIdml(folder) {
+    /**
+     * Recursively scans a folder an its subfolders for InDesign files and converts them to IDML.
+     * @param {Folder} folder - The folder to scan.
+     */
+    // Convert InDesign files to IDML.
+    var inddFiles = folder.getFiles("*.indd");
+    for (var i = 0; i < inddFiles.length; i++) {
+        convertInddToIdml(inddFiles[i]);
+    }
+
+    // Scan subfolders.
+    var subFolders = folder.getFiles("*");
+    for (var i = 0; i < subFolders.length; i++) {
+        if (subFolders[i] instanceof Folder) {
+            recursiveConvertInddToIdml(subFolders[i]);
+        }
+    }
+}
+
 function convertInddToIdml(file) {
     /**
      * Opens an InDesign INDD file and exports it as IDML.
