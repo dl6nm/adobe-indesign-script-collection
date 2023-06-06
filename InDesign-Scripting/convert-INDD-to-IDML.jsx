@@ -1,8 +1,9 @@
 // Open an InDesign (indd) file using JavaScript, ignore missing links, and save as IDML.
 
 // Set parameters
-var showDocumentInWindow = false;  // Set to true to open the InDesign file in a window.
+var showDocumentInWindow = true;  // Set to true to open the InDesign file in a window.
 var logFile = new File(Folder.myDocuments + "/indd-to-idml.log");
+var updateLinks = false;  // Set to true to update missing links.
 
 // Set script preferences
 app.scriptPreferences.userInteractionLevel = UserInteractionLevels.NEVER_INTERACT;
@@ -30,8 +31,10 @@ function convertInddToIdml(file) {
         // Open file in InDesign
         var doc = app.open(file, showDocumentInWindow);
 
-        // Update/Ignore missing links.
-        // doc.links.everyItem().update();
+        // Update or ignore missing links.
+        if (updateLinks) {
+            doc.links.everyItem().update();
+        }
         
         // Define the IDML file.
         var idmlFile = new File(file.path + "/" + doc.name.replace(/\.indd$/, ".idml"));
