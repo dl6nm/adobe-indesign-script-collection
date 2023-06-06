@@ -93,7 +93,15 @@ function convertInddToIdml(file) {
         // Update or ignore missing links.
         if (updateLinks) {
             try {
-                doc.links.everyItem().update();
+                var links = doc.links;
+                for (var i = 0; i < links.length; i++) {
+                    var link = links[i];
+                    if (link.status == LinkStatus.LINK_OUT_OF_DATE) {
+                        link.update();
+                    } else if (link.status == LinkStatus.LINK_MISSING) {
+                        log("Link missing: " + link.filePath);
+                    } 
+                }
             } catch (e) {
                 log(e);
             }
