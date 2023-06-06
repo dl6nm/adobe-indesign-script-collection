@@ -2,7 +2,7 @@
 
 // Set default parameters
 var showDocumentInWindow = true; // Set to true to open the InDesign file in a window.
-var logFile = new File(Folder.myDocuments + "/indd-to-idml.log");
+var logFile = new File(Folder.appData + "/indd-to-idml.log");
 var updateLinks = true; // Set to true to update missing links.
 var exportPdf = true; // Set to true to export a PDF file.
 
@@ -18,7 +18,8 @@ app.scriptPreferences.enableRedraw = true;
 */
 try {
     // Init logger
-    var logger = getLogger(logFile);
+    openLogFile(logFile);
+    log("Start script", "INFO");
 
     // Ask the user to confirm a recursive conversion of InDesign files to IDML, otherwise convert just a single file.
     var recursive = confirm(
@@ -26,6 +27,7 @@ try {
         false,
         "Convert InDesign files to IDML"
     );
+    log("Recursive: " + recursive, "INFO");
 
     // Ask the user to confirm also the export of a PDF file.
     var exportPdf = confirm(
@@ -49,10 +51,11 @@ try {
         recursiveConvertInddToIdml(folder);
     }
 } catch (e) {
-    log(e);
+    alert(e);
+    log(e, "ERROR");
 } finally {
     // Close the log file.
-    closeLogger(logFile);
+    closeLogFile(logFile);
 }
 
 /*
@@ -145,12 +148,17 @@ function exportPdfFile(doc) {
     }
 }
 
-function getLogger(logFile) {
-    logFile.encoding = "UTF-8";
-    return logFile.open("a");
+function openLogFile(logFile) {
+    try {
+        logFile.encoding = "UTF-8";
+        logFile.open("w");
+    } catch (e) {
+        alert(e);
+        logFile.close();
+    }
 }
 
-function closeLogger(logFile) {
+function closeLogFile(logFile) {
     /**
      * Closes the log file.
      * @param {File} logFile - The log file to close.
@@ -164,12 +172,13 @@ function log(message, severity) {
      * @param {string} message - The message to write to the log file.
      * @param {string} severity - The severity of the message.
      */
-    // logger.writeln(message);
+    alert("log()::logFile = " + logFile);
+    logFile.writeln(message + " " + severity);
 
-    // Log a message with timestamp and severity to the log file.
-    var timestamp = new Date().toLocaleString();
-    var severity = severity || "INFO";
-    logger.writeln(timestamp + " " + severity + ": " + message);
+    // // Log a message with timestamp and severity to the log file.
+    // var timestamp = new Date().toLocaleString();
+    // var severity = severity || "INFO";
+    // logger.writeln(timestamp + " " + severity + ": " + message);
 }
 
 function logError(message) {
