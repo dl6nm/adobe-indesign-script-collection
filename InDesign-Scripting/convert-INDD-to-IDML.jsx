@@ -9,6 +9,11 @@ var updateLinks = false;  // Set to true to update missing links.
 app.scriptPreferences.userInteractionLevel = UserInteractionLevels.NEVER_INTERACT;
 app.scriptPreferences.enableRedraw = true;
 
+/*
+    #########################################
+    # Main Script
+    #########################################
+*/
 try {
     // Init logger
     var logger = getLogger(logFile);
@@ -25,8 +30,16 @@ try {
     closeLogger(logFile);
 }
 
+/*
+    #########################################
+    # Functions
+    #########################################
+*/
 function convertInddToIdml(file) {
-    // Opens an InDesign INDD file and exports it as IDML.
+    /**
+     * Opens an InDesign INDD file and exports it as IDML.
+     * @param {File} file - The InDesign file to open.
+     */
     try {
         // Open file in InDesign
         var doc = app.open(file, showDocumentInWindow);
@@ -55,9 +68,17 @@ function getLogger(logFile) {
 }
 
 function closeLogger(logFile) {
+    /**
+     * Closes the log file.
+     * @param {File} logFile - The log file to close.
+     */
     logFile.close();
 }
 
 function log(message) {
+    /**
+     * Writes a message to the log file.
+     * @param {string} message - The message to write to the log file.
+     */
     logger.writeln(message);
 }
