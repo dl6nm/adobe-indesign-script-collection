@@ -228,7 +228,7 @@ function getLogLevel(levelName) {
         default:
             level = 20;
     }
-    return 
+    return level;
 }    
 
 function log(message, severity) {
@@ -250,7 +250,7 @@ function log(message, severity) {
 
     // Log only if severity level is higher than log level.
     severityLevel = getLogLevel(severity);
-    if (severityLevel > logLevel) {
+    if (severityLevel < logLevel) {
         return;
     }
     
