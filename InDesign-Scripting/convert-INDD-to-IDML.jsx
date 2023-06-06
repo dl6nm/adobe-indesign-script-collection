@@ -19,8 +19,10 @@ app.scriptPreferences.enableRedraw = true;
 try {
     // Init logger
     openLogFile(logFile);
+    logDebug("####################################################################################################");
     logDebug("Run script with " + app.name + " " + app.version);
     logDebug("Script file: " + File($.fileName).fsName);
+    logDebug("####################################################################################################");
 
     // Ask the user to confirm a recursive conversion of InDesign files to IDML, otherwise convert just a single file.
     var recursive = confirm(
@@ -54,7 +56,7 @@ try {
     }
 } catch (e) {
     alert(e);
-    logError(e, "ERROR");
+    logError("main():: " + e);
 } finally {
     // Close the log file.
     closeLogFile(logFile);
@@ -110,7 +112,7 @@ function convertInddToIdml(file) {
                     }
                 }
             } catch (e) {
-                logError(e);
+                logError("convertInddToIdml()::updateLinks:: " + e);
             }
         }
 
@@ -128,7 +130,7 @@ function convertInddToIdml(file) {
         doc.exportFile(ExportFormat.INDESIGN_MARKUP, idmlFile);
         logInfo("IDML file saved: " + idmlFile.fsName);
     } catch (e) {
-        logError(e);
+        logError("convertInddToIdml():: " + e);
     } finally {
         // Close the InDesign file
         doc.close(SaveOptions.NO);
@@ -142,7 +144,7 @@ function exportPdfFile(doc) {
      * @param {Document} doc - The InDesign document to export.
      */
     try {
-        logInfo("Export PDF file: " + doc.name);
+        logInfo("Exporting '" + doc.name + "' as PDF file.");
         // Define the PDF file.
         var pdfFile = new File(
             file.path + "/" + file.name.replace(/\.indd$/, "_preview.pdf")
@@ -152,7 +154,7 @@ function exportPdfFile(doc) {
         doc.exportFile(ExportFormat.PDF_TYPE, pdfFile);
         logInfo("PDF file exported: " + pdfFile.fsName);
     } catch (e) {
-        logError(e);
+        logError("exportPdfFile():: " + e);
     }
 }
 
