@@ -118,7 +118,7 @@ function convertInddToIdml(file) {
 
         // Export a PDF file.
         if (exportPdf) {
-            exportPdfFile(doc);
+            exportPdfFile(file, doc);
         }
 
         // Define the IDML file.
@@ -138,16 +138,16 @@ function convertInddToIdml(file) {
     }
 }
 
-function exportPdfFile(doc) {
+function exportPdfFile(file, doc) {
     /**
      * Exports an open InDesign file as PDF.
      * @param {Document} doc - The InDesign document to export.
      */
     try {
-        logInfo("Exporting '" + doc.name + "' as PDF file.");
+        logInfo("Exporting '" + file.name + "' as PDF file.");
         // Define the PDF file.
         var pdfFile = new File(
-            file.path + "/" + file.name.replace(/\.indd$/, "_preview.pdf")
+            file.path + "/" + doc.name.replace(/\.indd$/, "_preview.pdf")
         );
 
         // Export the PDF file.
