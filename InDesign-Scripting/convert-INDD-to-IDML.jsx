@@ -158,10 +158,48 @@ function closeLogger(logFile) {
     logFile.close();
 }
 
-function log(message) {
+function log(message, severity) {
     /**
      * Writes a message to the log file.
      * @param {string} message - The message to write to the log file.
+     * @param {string} severity - The severity of the message.
      */
-    logger.writeln(message);
+    // logger.writeln(message);
+
+    // Log a message with timestamp and severity to the log file.
+    var timestamp = new Date().toLocaleString();
+    var severity = severity || "INFO";
+    logger.writeln(timestamp + " " + severity + ": " + message);
+}
+
+function logError(message) {
+    /**
+     * Writes an error message to the log file.
+     * @param {string} message - The error message to write to the log file.
+     */
+    log(message, "ERROR");
+}
+
+function logWarning(message) {
+    /**
+     * Writes a warning message to the log file.
+     * @param {string} message - The warning message to write to the log file.
+     */
+    log(message, "WARNING");
+}
+
+function logInfo(message) {
+    /**
+     * Writes an info message to the log file.
+     * @param {string} message - The info message to write to the log file.
+     */
+    log(message, "INFO");
+}
+
+function logDebug(message) {
+    /**
+     * Writes a debug message to the log file.
+     * @param {string} message - The debug message to write to the log file.
+     */
+    log(message, "DEBUG");
 }
