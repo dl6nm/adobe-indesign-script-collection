@@ -4,13 +4,18 @@
 var showDocumentInWindow = false; // Set to true to open the InDesign file in a window.
 // var logFile = new File(Folder.appData + "/indd-to-idml.log");
 var logFile = new File(File($.fileName).path + "/indd-to-idml.log");
+var logLevelName = "INFO"; // Set to "DEBUG", "INFO", "WARNING", or "ERROR"
 var updateLinks = true; // Set to true to update missing links.
 var exportPdf = true; // Set to true to export a PDF file.
 
+// Auto generated parameters
+var logLevel = getLogLevel(logLevelName);
+
 // Set script preferences
 app.scriptPreferences.userInteractionLevel =
-    UserInteractionLevels.NEVER_INTERACT;
+UserInteractionLevels.NEVER_INTERACT;
 app.scriptPreferences.enableRedraw = true;
+
 
 main();
 
@@ -20,11 +25,12 @@ function main() {
      */
     try {
         // Init logger
+        
         openLogFile(logFile);
-        logDebug("####################################################################################################");
+        logInfo("####################################################################################################");
         logInfo("Start script: " + File($.fileName).fsName);
         logInfo("Environment " + app.name + " " + app.version);
-        logDebug("####################################################################################################");
+        logInfo("####################################################################################################");
 
         // Ask the user to confirm a recursive conversion of InDesign files to IDML, otherwise convert just a single file.
         var recursive = confirm(
@@ -56,16 +62,16 @@ function main() {
             var folder = Folder.selectDialog("Select the folder to scan.");
             recursiveConvertInddToIdml(folder);
         }
-        logDebug("####################################################################################################");
+        logInfo("####################################################################################################");
         logInfo("Finished without errors.");
-        logDebug("####################################################################################################");
+        logInfo("####################################################################################################");
     } catch (e) {
         alert(e);
         logError("main():: " + e);
     } finally {
-        logDebug("####################################################################################################");
+        logInfo("####################################################################################################");
         logInfo("Exit script");
-        logDebug("####################################################################################################");
+        logInfo("####################################################################################################");
         // Close the log file.
         closeLogFile(logFile);
     }
@@ -84,7 +90,7 @@ function recursiveConvertInddToIdml(folder) {
      */
     try {
         // Convert InDesign files to IDML.
-        logInfo("Scan folder: " + folder.fsName);
+        logDebug("Scan folder: " + folder.fsName);
         var inddFiles = folder.getFiles("*.indd");
         for (var i = 0; i < inddFiles.length; i++) {
             convertInddToIdml(inddFiles[i]);
@@ -197,14 +203,57 @@ function closeLogFile(logFile) {
     logFile.close();
 }
 
+function getLogLevel(levelName) {
+    /**
+     * Returns the log level for a given level name.
+     * @param {string} levelName - The name of the log level.
+     */
+    var level = 0;
+    switch (levelName) {
+        case "CRITICAL":
+            level = 50;
+            break;
+        case "ERROR":
+            level = 40;
+            break;
+        case "WARNING":
+            level = 30;
+            break;
+        case "INFO":
+            level = 20;
+            break;
+        case "DEBUG":
+            level = 10;
+            break;
+        default:
+            level = 20;
+    }
+    return 
+}    
+
 function log(message, severity) {
     /**
      * Writes a message to the log file.
      * @param {string} message - The message to write to the log file.
      * @param {string} severity - The severity of the message.
+     * 
+     * Severity levels:
+     * - ERROR
+     * - WARNING
+     * - INFO
+     * - DEBUG
+     * 
+     * Default severity is INFO.
+     * 
+     * The log file is located in the same folder as the script.
      */
-    // logFile.writeln(message + " " + severity);
 
+    // Log only if severity level is higher than log level.
+    severityLevel = getLogLevel(severity);
+    if (severityLevel > logLevel) {
+        return;
+    }
+    
     // Log a message with timestamp and severity to the log file.
     try {
         var timestamp = getISOTimestamp();
