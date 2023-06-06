@@ -172,13 +172,12 @@ function log(message, severity) {
      * @param {string} message - The message to write to the log file.
      * @param {string} severity - The severity of the message.
      */
-    alert("log()::logFile = " + logFile);
-    logFile.writeln(message + " " + severity);
+    // logFile.writeln(message + " " + severity);
 
-    // // Log a message with timestamp and severity to the log file.
-    // var timestamp = new Date().toLocaleString();
-    // var severity = severity || "INFO";
-    // logger.writeln(timestamp + " " + severity + ": " + message);
+    // Log a message with timestamp and severity to the log file.
+    var timestamp = getISOTimestamp();
+    var severity = severity || "INFO";
+    logFile.writeln(timestamp + " " + severity + ": " + message);
 }
 
 function logError(message) {
@@ -211,4 +210,29 @@ function logDebug(message) {
      * @param {string} message - The debug message to write to the log file.
      */
     log(message, "DEBUG");
+}
+
+function getISOTimestamp() {
+    /**
+     * Returns an ISO 8601 timestamp.
+     * @returns {string} - The ISO 8601 timestamp.
+     */
+    var now = new Date();
+    // Create ISO 8601 timestamp
+    var timestamp =
+        now.getFullYear() +
+        "-" +
+        ("0" + (now.getMonth() + 1)).slice(-2) +
+        "-" +
+        ("0" + now.getDate()).slice(-2) +
+        "T" +
+        ("0" + now.getHours()).slice(-2) +
+        ":" +
+        ("0" + now.getMinutes()).slice(-2) +
+        ":" +
+        ("0" + now.getSeconds()).slice(-2) +
+        "." +
+        ("00" + now.getMilliseconds()).slice(-3) +
+        "Z";
+    return timestamp;
 }
