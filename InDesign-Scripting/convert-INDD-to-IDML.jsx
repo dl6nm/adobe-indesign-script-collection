@@ -3,7 +3,7 @@
 // Set parameters
 var showDocumentInWindow = true; // Set to true to open the InDesign file in a window.
 var logFile = new File(Folder.myDocuments + "/indd-to-idml.log");
-var updateLinks = false; // Set to true to update missing links.
+var updateLinks = true; // Set to true to update missing links.
 var exportPdf = true; // Set to true to export a PDF file.
 
 // Set script preferences
@@ -47,7 +47,11 @@ function convertInddToIdml(file) {
 
     // Update or ignore missing links.
     if (updateLinks) {
-      doc.links.everyItem().update();
+        try {
+            doc.links.everyItem().update();
+        } catch (e) {
+            log(e);
+        }
     }
 
     // Export a PDF file.
