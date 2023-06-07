@@ -11,3 +11,11 @@ For all tasks done within the script a log file is created in the same folder as
 4. Restart InDesign
 5. The scripts are now available in the scripts panel
 6. Run the scripts by double clicking on them
+
+## Scripts
+
+### [convert-INDD-to-IDML.jsx](convert-INDD-to-IDML.jsx)
+
+This script converts Adobe InDesign INDD files to IDML and additionally exports a PDF file. 
+You have the option to choose between converting only one single INDD file to IDML and PDF 
+or recursively iterate over a folder and its subfolders to convert all INDD files to IDML and PDF.

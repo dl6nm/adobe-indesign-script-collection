@@ -1,7 +1,7 @@
 /**
  * This script converts Adobe InDesign INDD files to IDML and additionally exports a PDF file.
  * 
- * You have the option to choose between converting only a single INDD file to IDML and PDF or 
+ * You have the option to choose between converting only one single INDD file to IDML and PDF or 
  * recursively iterate over a folder and its subfolders to convert all INDD files to IDML and PDF.
  * 
  * InDesign-Scripting documentation: https://www.indesignjs.de/extendscriptAPI/indesign-latest
