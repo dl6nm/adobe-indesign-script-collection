@@ -64,7 +64,8 @@ function main() {
             recursiveConvertInddToIdml(folder);
         }
         logInfo("####################################################################################################");
-        logInfo("Finished without errors.");
+        logInfo("Finished without serious errors. Check the log file for warnings and errors to get more details.");
+        logInfo("Logfile: " + logFile.fsName)
         logInfo("####################################################################################################");
     } catch (e) {
         alert(e);
