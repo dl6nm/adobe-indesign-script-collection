@@ -1,4 +1,18 @@
-// Open an InDesign (indd) file using JavaScript, ignore missing links, and save as IDML.
+/**
+ * This script converts Adobe InDesign INDD files to IDML and additionally exports a PDF file.
+ * 
+ * You have the option to choose between converting only a single INDD file to IDML and PDF or 
+ * recursively iterate over a folder and its subfolders to convert all INDD files to IDML and PDF.
+ * 
+ * InDesign-Scripting documentation: https://www.indesignjs.de/extendscriptAPI/indesign-latest
+ * 
+ * 
+ * @author dl6nm<mail@dl6nm.de>
+ * @license MIT
+ * @version 1.0.0
+ * 
+ */
+
 
 // Set default parameters
 var showDocumentInWindow = false; // Set to true to open the InDesign file in a window.
