@@ -59,6 +59,7 @@ function main() {
         } else {
             // Convert a folder and its subfolders.
             // Scan a folder and its subfolders for InDesign files and convert them to IDML.
+            // var folder = new Folder("//mynas/myShare");
             var folder = Folder.selectDialog("Select the folder to scan.");
             recursiveConvertInddToIdml(folder);
         }
