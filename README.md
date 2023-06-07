@@ -1,6 +1,7 @@
 # Adobe InDesign Script Collection
 
-This is a collection of scripts for Adobe InDesign. The scripts are written in JavaScript (JSX).
+This is a collection of scripts for Adobe InDesign. The scripts are written in JavaScript.
+For all tasks done within the script a log file is created in the same folder as the script.
 
 ## Usage
 
