@@ -26,8 +26,7 @@ var exportPdf = true; // Set to true to export a PDF file.
 var logLevel = getLogLevel(logLevelName);
 
 // Set script preferences
-app.scriptPreferences.userInteractionLevel =
-UserInteractionLevels.NEVER_INTERACT;
+app.scriptPreferences.userInteractionLevel = UserInteractionLevels.NEVER_INTERACT;
 app.scriptPreferences.enableRedraw = true;
 
 
